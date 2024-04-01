@@ -1,0 +1,5 @@
+../Core/Src/diff_controller.c:13:6:initPID	16	static
+../Core/Src/diff_controller.c:27:6:resetPID	16	static
+../Core/Src/diff_controller.c:38:6:doPID	32	static
+../Core/Src/diff_controller.c:65:6:updateSpeed	32	static
+../Core/Src/diff_controller.c:85:6:updatePID	16	static
