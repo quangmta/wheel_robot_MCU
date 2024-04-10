@@ -175,11 +175,11 @@ void runCommand() {
 	case READ_ENCODERS:
 //		sprintf((char*) tx_buffer, "%ld %ld\n", leftPID.Encoder,
 //				rightPID.Encoder);
-		tx_buffer[0] = (leftPID.Encoder >> 8) && 0xFF;
-		tx_buffer[1] = leftPID.Encoder && 0xFF;
+		tx_buffer[0] = (leftPID.Encoder >> 8) & 0xFF;
+		tx_buffer[1] = leftPID.Encoder & 0xFF;
 
 		tx_buffer[2] = (rightPID.Encoder >> 8) && 0xFF;
-		tx_buffer[3] = rightPID.Encoder && 0xFF;
+		tx_buffer[3] = rightPID.Encoder & 0xFF;
 
 		tx_buffer[4] = calculate_crc8(tx_buffer, 4);
 
