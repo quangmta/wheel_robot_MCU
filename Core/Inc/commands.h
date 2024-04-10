@@ -17,5 +17,6 @@
 #define READ_SPEED	   's'
 #define LEFT            0
 #define RIGHT           1
+#define CRC8_POLYNOMIAL 0x31
 
 #endif /* INC_COMMANDS_H_ */
