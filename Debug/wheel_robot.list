@@ -1646,16 +1646,16 @@ void runCommand() {
 		break;
  8000f62:	e0fa      	b.n	800115a <runCommand+0x2ba>
 	case RESET_ENCODERS:
-		__HAL_TIM_SET_COUNTER(&htim2, 0);
+		__HAL_TIM_SET_COMPARE(&htim2,TIM_CHANNEL_ALL, 0);
  8000f64:	4b87      	ldr	r3, [pc, #540]	; (8001184 <runCommand+0x2e4>)
  8000f66:	681b      	ldr	r3, [r3, #0]
  8000f68:	2200      	movs	r2, #0
- 8000f6a:	625a      	str	r2, [r3, #36]	; 0x24
-		__HAL_TIM_SET_COUNTER(&htim3, 0);
+ 8000f6a:	641a      	str	r2, [r3, #64]	; 0x40
+		__HAL_TIM_SET_COMPARE(&htim3,TIM_CHANNEL_ALL, 0);
  8000f6c:	4b86      	ldr	r3, [pc, #536]	; (8001188 <runCommand+0x2e8>)
  8000f6e:	681b      	ldr	r3, [r3, #0]
  8000f70:	2200      	movs	r2, #0
- 8000f72:	625a      	str	r2, [r3, #36]	; 0x24
+ 8000f72:	641a      	str	r2, [r3, #64]	; 0x40
 		break;
  8000f74:	e0f1      	b.n	800115a <runCommand+0x2ba>
 	case MOTOR_SPEEDS:

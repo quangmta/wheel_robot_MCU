@@ -136,6 +136,19 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
 		HAL_UART_Receive_IT(&huart1, &rx_data, 1);
 	}
 }
+uint8_t calculate_crc8(uint8_t *pcBlock, uint8_t len) {
+	uint8_t crc = 0xFF;
+	uint8_t i;
+
+	while (len--) {
+		crc ^= *pcBlock++;
+
+		for (i = 0; i < 8; i++)
+			crc = crc & 0x80 ? (crc << 1) ^ CRC8_POLYNOMIAL : crc << 1;
+	}
+
+	return crc;
+}
 void resetCommand() {
 	rx_cmd = '\0';
 	memset(rx_argv1, 0, sizeof(rx_argv1));
@@ -160,19 +173,33 @@ void runCommand() {
 //	HAL_UART_Transmit(&huart1, tx_buffer, strlen((char*)tx_buffer), HAL_MAX_DELAY);
 	switch (rx_cmd) {
 	case READ_ENCODERS:
-		sprintf((char*) tx_buffer, "%ld %ld\n", leftPID.Encoder,
-				rightPID.Encoder);
-		HAL_UART_Transmit(&huart1, tx_buffer, strlen((char*) tx_buffer),
-		HAL_MAX_DELAY);
+//		sprintf((char*) tx_buffer, "%ld %ld\n", leftPID.Encoder,
+//				rightPID.Encoder);
+		tx_buffer[0] = (leftPID.Encoder >> 8) && 0xFF;
+		tx_buffer[1] = leftPID.Encoder && 0xFF;
+
+		tx_buffer[2] = (rightPID.Encoder >> 8) && 0xFF;
+		tx_buffer[3] = rightPID.Encoder && 0xFF;
+
+		tx_buffer[4] = calculate_crc8(tx_buffer, 4);
+
+		HAL_UART_Transmit(&huart1, tx_buffer, 5, HAL_MAX_DELAY);
 		break;
 	case READ_SPEED:
-		sprintf((char*) tx_buffer, "%ld %ld\n", leftPID.speed, rightPID.speed);
-		HAL_UART_Transmit(&huart1, tx_buffer, strlen((char*) tx_buffer),
-		HAL_MAX_DELAY);
+//		sprintf((char*) tx_buffer, "%ld %ld\n", leftPID.speed, rightPID.speed);
+		tx_buffer[0] = (leftPID.speed >> 8) && 0xFF;
+		tx_buffer[1] = leftPID.speed && 0xFF;
+
+		tx_buffer[2] = (rightPID.speed >> 8) && 0xFF;
+		tx_buffer[3] = rightPID.speed && 0xFF;
+
+		tx_buffer[4] = calculate_crc8(tx_buffer, 4);
+
+		HAL_UART_Transmit(&huart1, tx_buffer, 5, HAL_MAX_DELAY);
 		break;
 	case RESET_ENCODERS:
-		__HAL_TIM_SET_COUNTER(&htim2, 0);
-		__HAL_TIM_SET_COUNTER(&htim3, 0);
+		__HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_ALL, 0);
+		__HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_ALL, 0);
 		break;
 	case MOTOR_SPEEDS:
 		if (rx_arg1 == 0 && rx_arg2 == 0) {
