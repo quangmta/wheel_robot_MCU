@@ -1621,11 +1621,6 @@ void runCommand() {
  8000f08:	b580      	push	{r7, lr}
  8000f0a:	b08c      	sub	sp, #48	; 0x30
  8000f0c:	af02      	add	r7, sp, #8
-//	uint8_t num_index = 0;
-//	while (rxBuffer[num_index] != '\0') {
-//		num[num_index] = rxBuffer[num_index + 1];
-//		num_index++;
-//	}
 	int i = 0;
  8000f0e:	2300      	movs	r3, #0
  8000f10:	627b      	str	r3, [r7, #36]	; 0x24

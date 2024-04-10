@@ -157,12 +157,6 @@ void resetCommand() {
 	rx_index = 0;
 }
 void runCommand() {
-//	char num[30];
-//	uint8_t num_index = 0;
-//	while (rxBuffer[num_index] != '\0') {
-//		num[num_index] = rxBuffer[num_index + 1];
-//		num_index++;
-//	}
 	int i = 0;
 	char *p = (char*) rx_argv1;
 	char *str;
