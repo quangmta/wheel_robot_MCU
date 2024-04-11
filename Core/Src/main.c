@@ -169,11 +169,11 @@ void runCommand() {
 	case READ_ENCODERS:
 //		sprintf((char*) tx_buffer, "%ld %ld\n", leftPID.Encoder,
 //				rightPID.Encoder);
-		tx_buffer[0] = (leftPID.Encoder >> 8) & 0xFF;
-		tx_buffer[1] = leftPID.Encoder & 0xFF;
+		tx_buffer[0] = leftPID.Encoder & 0xFF;
+		tx_buffer[1] = (leftPID.Encoder >> 8) & 0xFF;
 
-		tx_buffer[2] = (rightPID.Encoder >> 8) && 0xFF;
-		tx_buffer[3] = rightPID.Encoder & 0xFF;
+		tx_buffer[2] = rightPID.Encoder & 0xFF;
+		tx_buffer[3] = (rightPID.Encoder >> 8) & 0xFF;
 
 		tx_buffer[4] = calculate_crc8(tx_buffer, 4);
 
@@ -181,19 +181,19 @@ void runCommand() {
 		break;
 	case READ_SPEED:
 //		sprintf((char*) tx_buffer, "%ld %ld\n", leftPID.speed, rightPID.speed);
-		tx_buffer[0] = (leftPID.speed >> 8) && 0xFF;
-		tx_buffer[1] = leftPID.speed && 0xFF;
+		tx_buffer[0] = (leftPID.speed >> 8) & 0xFF;
+		tx_buffer[1] = leftPID.speed & 0xFF;
 
-		tx_buffer[2] = (rightPID.speed >> 8) && 0xFF;
-		tx_buffer[3] = rightPID.speed && 0xFF;
+		tx_buffer[2] = (rightPID.speed >> 8) & 0xFF;
+		tx_buffer[3] = rightPID.speed & 0xFF;
 
 		tx_buffer[4] = calculate_crc8(tx_buffer, 4);
 
 		HAL_UART_Transmit(&huart1, tx_buffer, 5, HAL_MAX_DELAY);
 		break;
 	case RESET_ENCODERS:
-		__HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_ALL, 0);
-		__HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_ALL, 0);
+		__HAL_TIM_SET_COUNTER(&htim2, 0);
+		__HAL_TIM_SET_COUNTER(&htim3, 0);
 		break;
 	case MOTOR_SPEEDS:
 		if (rx_arg1 == 0 && rx_arg2 == 0) {
