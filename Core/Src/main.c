@@ -192,8 +192,14 @@ void runCommand() {
 		HAL_UART_Transmit(&huart1, tx_buffer, 5, HAL_MAX_DELAY);
 		break;
 	case RESET_ENCODERS:
-		__HAL_TIM_SET_COUNTER(&htim2, 0);
-		__HAL_TIM_SET_COUNTER(&htim3, 0);
+		__HAL_TIM_SET_COUNTER(&htim2, 0x00);
+		__HAL_TIM_SET_COUNTER(&htim3, 0x00);
+		initPID(&leftPID);
+		initPID(&rightPID);
+		if (__HAL_TIM_GET_COUNTER(&htim2) == 0x00 && __HAL_TIM_GET_COUNTER(&htim3) == 0x00)
+			HAL_UART_Transmit(&huart1, (uint8_t*) "OK\n", 3, HAL_MAX_DELAY);
+		else
+			HAL_UART_Transmit(&huart1, (uint8_t*) "ERROR\n", 6, HAL_MAX_DELAY);
 		break;
 	case MOTOR_SPEEDS:
 		if (rx_arg1 == 0 && rx_arg2 == 0) {
